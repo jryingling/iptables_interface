@@ -1,9 +1,4 @@
-# Plan: iptables-interface TUI
-
-## Context
-Build a terminal UI (TUI) in Go to simplify creating iptables rules for different device types (desktop, server, router, custom). The tool lets users pick a device profile with sensible defaults, manage rules per chain, and export to iptables-save format. Scope: filter table only (INPUT/OUTPUT/FORWARD) to start.
-
----
+# iptables_interface TUI
 
 ## Stack
 - **Go 1.22**
