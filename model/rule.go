@@ -23,9 +23,7 @@ type Ruleset struct {
     RulesetName string
     // dont store as slice, easier to access this way
     // chains are fixed
-    Input Chain
-    Output Chain
-    Forward Chain
+    Input, Output, Forward Chain 
 }
 
 /* 
