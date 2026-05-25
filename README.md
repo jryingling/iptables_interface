@@ -73,6 +73,26 @@ type Ruleset struct {
 
 All profiles: OUTPUT policy ACCEPT.
 
+### Why each default rule exists
+
+**Conntrack (ESTABLISHED,RELATED)**
+Without this, a DROP input policy breaks all outbound traffic too. When you initiate a connection (e.g. curl, apt), the reply packets come back as INPUT. Conntrack recognizes them as part of an existing session and lets them through. This is always rule #1 — it matches the most traffic and should be evaluated first.
+
+**Loopback (lo)**
+The loopback interface (`lo`) is how processes on the same machine talk to each other — databases, local services, IPC. Blocking it breaks a lot of software silently. Always allowed.
+
+**ICMP**
+Allows ping and network diagnostics. Without it, `ping` fails and tools like `traceroute` give incomplete output. Harmless to allow on a desktop or server.
+
+**SSH:22 (Server/Router)**
+If you're managing a remote machine, you need SSH to stay open or you lock yourself out. Always add this before setting INPUT policy to DROP.
+
+**HTTP:80 / HTTPS:443 (Server)**
+Standard web server ports. A server with no open web ports isn't serving anything.
+
+**FORWARD chain (Router)**
+A router forwards packets between interfaces (e.g. LAN to WAN). Without conntrack in FORWARD, return traffic for forwarded connections gets dropped. The LAN→WAN rule allows new connections originating from the internal network.
+
 ---
 
 ## Screen State Machine (`ui/app.go`)
